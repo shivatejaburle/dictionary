@@ -4,8 +4,54 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dictionary</title>
+        {% load static %}
+        <link rel="shortcut icon" href="{% static 'definitions/img/dictionary-icon.png' %}" type="image/png">
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
     </head>
-    <body>
-        <h1>Dictionary</h1>
+    <body class="bg-warning bg-opacity-50">
+        <div class="container p-5">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="">
+                        <img src="{% static 'definitions/img/dictionary.png' %}" class="img-fluid" alt="dictionary">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <input type="text" class="form-control form-control-lg" id="search_word" name="search_word" required placeholder="Start typing any word">
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-lg px-4 gap-3" onclick="window.location='/'">Reset</button>
+                        <button type="submit" class="btn btn-primary btn-lg">Search</button>
+                    </form>
+                    
+                    {% if dictionary|length == 1 %}
+                        <div class="alert alert-danger mt-3" role="alert">
+                            {{dictionary.error}}
+                        </div>
+                    {% elif dictionary|length > 1 %}
+                        <div class="mt-3">
+                            <h1>{{dictionary.search_word}}</h1>
+                            {% if dictionary.pronunciation %}
+                                <p>
+                                    <audio controls>
+                                        <source src="{{dictionary.pronunciation}}" type="audio/mpeg">
+                                        Your browser does not support the audio tag.
+                                    </audio>
+                                </p>
+                            {% endif %}
+                            <p>{{dictionary.definitions|safe}}</p>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info mt-3" role="alert">
+                            Please enter any word and click on search...
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>        
     </body>
 </html>
