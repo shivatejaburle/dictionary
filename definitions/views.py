@@ -17,7 +17,7 @@ class IndexView(View):
         return render(request, self.template_name)
 
     def post(self, request):
-        word = request.POST['search_word']
+        word = (request.POST['search_word']).lower()
         search_word = word.replace(" ", "%20")
         
         try:
